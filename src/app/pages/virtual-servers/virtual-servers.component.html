@@ -1,0 +1,90 @@
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="mb-3">
+                <label for="server-name" class="form-label">Server Name</label>
+                <input type="text" class="form-control" id="server-name" [(ngModel)]="serverName">
+              </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="mb-3">
+                <label for="server-ip" class="form-label">Server IP</label>
+                <input type="text" class="form-control" id="server-ip" [(ngModel)]="serverIP">
+              </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <button style="margin-top: 10px;" class="btn btn-primary" (click)="addNewServer()">Add Server</button>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="mb-3">
+                    <label for="server-ip" class="form-label">Search Server or Host</label>
+                <input type="text" class="form-control" id="server-ip" [(ngModel)]="searchTerm" placeholder="Name, IP address or Domain">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-3" *ngFor="let server of filteredServers">
+            <div class="card" >
+                <div class="card-body">
+                  <h5 class="card-title">{{server.name}}</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">{{server.ipAddress}}</h6>
+
+                  <div class="d-flex  justify-content-between mb-3 mt-4">
+                    <div>Name</div>
+                    <div>Domain</div>
+                    <div>Ip Address</div>
+                    <div>Active state</div>
+                    <div>Delete</div>
+                  </div>
+                  <div class="d-flex  justify-content-between mb-3" *ngFor="let host of server.sites">
+                    <div>{{host.name}}</div>
+                    <div>{{host.domainName}}</div>
+                    <div>{{host.ipAddress}}</div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="{{host.id}}" [checked]="host.active" (change)="changeHostActiveStatus(server.id,host.id)">
+                        <label class="form-check-label" for="{{host.id}}"></label>
+                    </div>
+                    <div><button class="btn btn-sm btn-danger" (click)="deleteHost(server.id,host.id)">Delete Host</button></div>
+                  </div>
+                 <button class="btn btn-success " (click)="host.currentServerId = server.id" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Host</button>
+                 <button class="btn btn-danger " style="margin-left: 20px;" (click)="deleteServer(server.id)">Delete Server</button>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add Host</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body ">
+            <div class="d-flex  justify-content-between mb-3" >
+                <div class="mb-3">
+                    <input style="width: 80%;" type="text" class="form-control" id="host-name" [(ngModel)]="host.name" placeholder="Host name">
+                </div>
+                <div class="mb-3">
+                    <input style="width: 80%;" type="text" class="form-control" id="host-domain" [(ngModel)]="host.domainName" placeholder="Host domain name">
+                </div>
+                <div class="mb-3">
+                    <input style="width: 80%;" type="text" class="form-control" id="host-IP" [(ngModel)]="host.ipAddress" placeholder="Host IP address">
+                </div>
+                <div>    
+                    
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-success" (click)="addHostToServer()" data-bs-dismiss="modal">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
